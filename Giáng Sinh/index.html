@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư Giáng Sinh 2024 🎄</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="falling-container"></div>
+
+    <!-- VIDEO NỀN GIÁNG SINH -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="christmasVideo">
+            <source src="music/video.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ video.
+        </video>
+
+        <!-- Lớp tối nhẹ để chữ vẫn đọc được -->
+        <div class="video-overlay"></div>
+    </div>
+    <!-- Canvas cho tuyết rơi -->
+    <canvas id="snowCanvas"></canvas>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn" id="musicBtn" onclick="toggleMusic()">
+            🎵 Phát nhạc
+        </button>
+        <div class="music-status" id="musicStatus">Nhạc: Tắt</div>
+
+        <button class="control-btn" id="snowBtn" onclick="toggleSnow()">
+            ❄️ Tắt tuyết
+        </button>
+
+        <button class="control-btn" onclick="toggleAnimation()">
+            ⚙️ Tắt animation
+        </button>
+    </div>
+
+    <!-- Audio (nhạc nền) -->
+    <!-- Đặt file music.mp3 cùng thư mục với index.html -->
+    <audio id="bgMusic" loop>
+        <source src="music/music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Container chính -->
+    <div class="container">
+        <!-- Phong bì -->
+        <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
+            <div class="envelope">
+                <div class="envelope-body"></div>
+                <div class="envelope-flap"></div>
+                <div class="envelope-seal">🎄</div>
+                <div class="envelope-text">Click để mở</div>
+            </div>
+        </div>
+
+        <!-- Lá thư -->
+        <div class="letter" id="letter">
+            <div class="letter-header">
+                <h1 class="letter-title">⛄Merry Christmas!⛄</h1>
+                <p class="letter-subtitle">🎄Chúc mừng Giáng Sinh 2025🎄</p>
+            </div>
+
+            <div class="letter-text">
+                <p>Gửi đến người tôi yêu những lời chúc tốt đẹp nhất!</p>
+                <p>
+                    Giáng Sinh đến rồi, và điều đầu tiên anh chỉ muốn làm là gửi đến em lời chúc yêu thương nhất. Chúc
+                    em có một mùa Noel thật ấm áp, an lành và tràn ngập niềm vui. Nhưng hơn hết, anh/chỉ mong em luôn
+                    hạnh phúc mỗi ngày, không chỉ trong ngày lễ mà trong cả những khoảnh khắc bình thường nhất của cuộc
+                    sống.
+                </p>
+                <p>
+                    Cảm ơn em vì đã xuất hiện, mang đến cho anh/chỉ sự bình yên, sự dịu dàng và những cảm xúc mà trước
+                    đây anh/chỉ chưa từng nghĩ mình sẽ có. Trong cái lạnh của mùa đông, chỉ cần có em bên cạnh là mọi
+                    thứ đều trở nên ấm áp hơn. Hy vọng Giáng Sinh năm nay và những năm sau nữa, chúng ta sẽ luôn cùng
+                    nhau tạo ra những kỷ niệm thật đẹp, thật đáng nhớ.
+                </p>
+                <p>
+                    Chúc em luôn mạnh khỏe, rạng rỡ và giữ mãi nụ cười mà anh/chỉ luôn yêu thích. Nếu Giáng Sinh có điều
+                    ước, anh/chỉ chỉ ước một điều duy nhất: có em trong cuộc đời, hôm nay, ngày mai và thật lâu về sau.
+                </p>
+                <p>
+                    Merry Christmas, tình yêu của anh.
+                </p>
+                <p style="text-align: center; margin-top: 20px; font-style: italic;">
+                    Yêu thương, <br>
+                    <strong>Người gửi thư PHẠM QUỐC KHÁNH</strong>
+                </p>
+            </div>
+
+            <!-- Slideshow ảnh -->
+            <!-- Tạo thư mục /images/ và đặt các file: xmas1.jpg, xmas2.jpg, xmas3.jpg, xmas4.jpg, xmas5.jpg -->
+            <div class="slideshow-container">
+                <img class="slide active" src="img/1.jpg" alt="Christmas 1">
+                <img class="slide" src="img/2.jpg" alt="Christmas 2">
+                <img class="slide" src="img/3.jpg" alt="Christmas 3">
+                <img class="slide" src="img/4.webp" alt="Christmas 4">
+                <img class="slide" src="img/5.webp" alt="Christmas 5">
+
+                <button class="slide-btn prev" onclick="changeSlide(-1)">❮</button>
+                <button class="slide-btn next" onclick="changeSlide(1)">❯</button>
+            </div>
+
+            <div class="dots-container" id="dotsContainer"></div>
+
+            <div class="letter-footer">
+                <button class="share-btn" onclick="shareCard()">
+                    Chia sẻ thư này
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+<!-- 
+===============================================
+HƯỚNG DẪN SỬ DỤNG
+===============================================
+
+1. THAY ẢNH SLIDESHOW:
+   - Tạo thư mục "images" cùng cấp với file index.html
+   - Đặt 5 ảnh tên: xmas1.jpg, xmas2.jpg, xmas3.jpg, xmas4.jpg, xmas5.jpg
+   - Hoặc thay đổi src của các thẻ <img class="slide"> trong HTML (dòng ~450-454)
+
+2. THAY NHẠC NỀN:
+   - Đặt file nhạc MP3 tên "music.mp3" cùng thư mục với index.html
+   - Hoặc sửa src trong thẻ <audio> (dòng ~48)
+
+3. TÙY CHỈNH NỘI DUNG:
+   - Sửa tiêu đề: tìm class="letter-title" (dòng ~82)
+   - Sửa lời chúc: tìm class="letter-text" (dòng ~85-100)
+   - Thay màu sắc: sửa CSS variables ở :root (dòng ~19-24)
+
+4. CHIA SẺ:
+   - Click nút "Chia sẻ thư này"
+   - Link có dạng: ?to=TEN_NGUOI_NHAN
+   - Người nhận sẽ thấy tên của họ trong thư
+
+===============================================
+-->
