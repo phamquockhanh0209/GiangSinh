@@ -1,0 +1,578 @@
+/* ===================== CSS VARIABLES ===================== */
+:root {
+    --primary-red: #d42426;
+    --secondary-green: #2d5016;
+    --gold: #ffd700;
+    --snow-white: #ffffff;
+    --bg-gradient: linear-gradient(135deg, #1a472a 0%, #2d5016 50%, #5a1a1a 100%);
+}
+
+/* ===================== RESET & BASE ===================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ===================== VIDEO BACKGROUND ===================== */
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+    /* Đặt thấp hơn canvas tuyết và nội dung */
+}
+
+#christmasVideo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    /* Lớp mờ nhẹ để chữ rõ hơn */
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Đẩy nội dung lên trên video */
+.container,
+.controls,
+#snowCanvas,
+.stickers {
+    position: relative;
+    z-index: 2;
+}
+
+/* Nếu vẫn muốn giữ tuyết rơi thì để, không thì tắt luôn cũng được */
+
+/* ===================== CANVAS TUYẾT RƠI ===================== */
+#snowCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ===================== CONTAINER CHÍNH ===================== */
+.container {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* ===================== CONTROLS (Nhạc, Tuyết, Animation) ===================== */
+.controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.control-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--primary-red);
+    border-radius: 50px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--secondary-green);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:hover {
+    background: var(--primary-red);
+    color: white;
+    transform: scale(1.05);
+}
+
+.music-status {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 5px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===================== PHONG BÌ ===================== */
+.envelope-wrapper {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.envelope-wrapper:hover {
+    transform: scale(1.05) rotate(2deg);
+    filter: drop-shadow(0 0 20px var(--gold));
+}
+
+.envelope-wrapper.opened {
+    pointer-events: none;
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+}
+
+/* Thân phong bì */
+.envelope-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+    border: 3px solid var(--primary-red);
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Nắp phong bì */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-red) 0%, #a01e20 100%);
+    clip-path: polygon(0 0, 50% 60%, 100% 0);
+    transform-origin: top center;
+    transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border-radius: 10px 10px 0 0;
+    z-index: 2;
+}
+
+.envelope-wrapper.opened .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+/* Dấu niêm phong */
+.envelope-seal {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    z-index: 3;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+/* Văn bản trên phong bì */
+.envelope-text {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Dancing Script', cursive;
+    font-size: 20px;
+    color: var(--secondary-green);
+    text-align: center;
+    z-index: 1;
+}
+
+/* ===================== LÁ THƯ ===================== */
+.letter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 150%);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    background: linear-gradient(135deg, #fff 0%, #fffef8 100%);
+    border: 5px solid var(--primary-red);
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    z-index: 10000 !important;
+    opacity: 0;
+    overflow-y: auto;
+    font-family: 'Dancing Script', cursive;
+}
+
+.letter.show {
+    animation: letterFlyUp 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes letterFlyUp {
+    0% {
+        transform: translate(-50%, 150%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+.letter-glow {
+    box-shadow: 0 0 40px var(--gold), 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* Header lá thư */
+.letter-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.letter-title {
+    font-size: 48px;
+    color: var(--primary-red);
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.letter-subtitle {
+    font-size: 16px;
+    color: var(--secondary-green);
+    font-weight: 300;
+}
+
+/* Nội dung */
+.letter-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: justify;
+}
+
+/* ===================== SLIDESHOW ẢNH ===================== */
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 30px auto;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.slide {
+    display: none;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.slide.active {
+    display: block;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.falling-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 3 !important;
+    overflow: hidden;
+}
+
+.falling-item {
+    position: absolute;
+    top: -100px;
+    font-size: 30px;
+    animation: fall linear infinite;
+    user-select: none;
+    opacity: 0.3;
+}
+
+.falling-item img {
+    pointer-events: none !important;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.4));
+    /* bóng đậm hơn */
+    image-rendering: -webkit-optimize-contrast;
+    /* nét hơn trên Chrome */
+    image-rendering: crisp-edges;
+    /* nét hơn trên mọi trình duyệt */
+    transform: translateZ(0);
+    /* bật GPU tăng độ mượt */
+    backface-visibility: hidden;
+    border-radius: 12px;             /* bo góc nhẹ → mềm mại hơn */
+    transition: opacity 0.5s;
+    opacity: 0.35;
+}
+
+/* Tạo nhiều kiểu rơi khác nhau */
+@keyframes fall {
+    0% {
+        transform: translateY(-150px) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.55;
+    }
+
+    90% {
+        opacity: 0.55;
+    }
+
+    100% {
+        transform: translateY(calc(100vh + 150px)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes sway {
+    0% {
+        transform: rotate(-20deg);
+    }
+
+    100% {
+        transform: rotate(20deg);
+    }
+}
+
+/* Responsive cho điện thoại */
+@media (max-width: 768px) {
+    .falling-item {
+        font-size: 20px;
+    }
+}
+
+/* Nút prev/next */
+.slide-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    font-size: 24px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.slide-btn:hover {
+    background: var(--primary-red);
+    color: white;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}
+
+/* Dots */
+.dots-container {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background: #ccc;
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: var(--primary-red);
+    transform: scale(1.3);
+}
+
+/* ===================== FOOTER ===================== */
+.letter-footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid var(--gold);
+}
+
+.share-btn {
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(212, 36, 38, 0.4);
+}
+
+.share-btn:hover {
+    background: #a01e20;
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(212, 36, 38, 0.6);
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 768px) {
+    .controls {
+        top: 10px;
+        right: 10px;
+        gap: 8px;
+    }
+
+    .control-btn {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+
+    .envelope {
+        width: 250px;
+        height: 170px;
+    }
+
+    .envelope-seal {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .envelope-text {
+        font-size: 16px;
+        bottom: 30px;
+    }
+
+    .letter {
+        padding: 30px 20px;
+        width: 95%;
+    }
+
+    .letter-title {
+        font-size: 36px;
+    }
+
+    .letter-text {
+        font-family: 'Dancing Script', cursive !important;
+        font-size: 26px;
+        line-height: 1.9;
+        color: #333;
+        margin-bottom: 40px;
+        text-align: justify;
+    }
+
+    .slide {
+        height: 200px;
+    }
+
+    .sticker {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .envelope {
+        width: 200px;
+        height: 140px;
+    }
+
+    .letter-title {
+        font-size: 28px;
+    }
+
+    .slideshow-container {
+        max-width: 100%;
+    }
+}
+
+/* ===================== ACCESSIBILITY ===================== */
+.reduce-motion .envelope-flap,
+.reduce-motion .letter,
+.reduce-motion .sticker,
+.reduce-motion .dot {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Hide scrollbar nhưng vẫn scroll được */
+.letter::-webkit-scrollbar {
+    width: 8px;
+}
+
+.letter::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.letter::-webkit-scrollbar-thumb {
+    background: var(--primary-red);
+    border-radius: 10px;
+}
+
+.letter::-webkit-scrollbar-thumb:hover {
+    background: #a01e20;
+}
